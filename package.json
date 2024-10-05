@@ -1,0 +1,17 @@
+{
+  "name": "device-preview-shot",
+  "version": "2.1.3",
+  "description": "Approximate how your Flutter app looks and performs on another device",
+  "main": "index.js",
+  "repository": "https://github.com/abraralidev/device-preview-shot.git",
+  "author": "Abrar Ali <abraralidev@gmail.com>",
+  "license": "MIT",
+  "devDependencies": {
+    "@semantic-release/changelog": "6.0.3",
+    "@semantic-release/git": "10.0.1",
+    "conventional-changelog-conventionalcommits": "8.0.0",
+    "semantic-release": "24.1.2",
+    "semantic-release-pub": "0.8.27",
+    "semantic-release-replace-plugin": "1.2.7"
+  }
+}

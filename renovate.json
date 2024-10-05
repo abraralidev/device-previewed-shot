@@ -1,0 +1,26 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": [
+    "github>abraralidev/renovate-configs",
+    "github>abraralidev/renovate-configs:package",
+    "github>abraralidev/renovate-configs:dart",
+    "github>abraralidev/renovate-configs:flutterIgnorePaths",
+    "github>abraralidev/renovate-configs:flutterVersion",
+    "github>abraralidev/renovate-configs:javascript",
+    "github>abraralidev/renovate-configs:nodeVersion",
+    "github>abraralidev/renovate-configs:nodeChore"
+  ],
+  "packageRules": [
+    {
+      "groupName": "Collection",
+      "description": "Used in Flutter SDK so its version has to be aligned with the SDK",
+      "matchPaths": [
+        "pubspec.yaml"
+      ],
+      "matchPackageNames": [
+        "collection"
+      ],
+      "enabled": false
+    }
+  ]
+}

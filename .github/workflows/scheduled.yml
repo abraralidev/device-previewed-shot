@@ -1,0 +1,12 @@
+name: Scheduled actions
+
+on:
+  schedule:
+    - cron: "0 8 * * *"
+
+jobs:
+  scheduled:
+    uses: abraralidev/github-actions-workflows/.github/workflows/scheduled.yml@478b37ce0becca4b73024eda9c824f024a37f58d
+    secrets:
+      GH_APP_ID: ${{ secrets.GH_APP_ID }}
+      GH_APP_PRIVATE_KEY: ${{ secrets.GH_APP_PRIVATE_KEY }}
