@@ -2,19 +2,17 @@
   <img src="https://github.com/aloisdeniel/flutter_device_preview/raw/master/logo.png" alt="Device Preview for Flutter" />
 </p>
 
-[![pub package](https://img.shields.io/pub/v/device-preview-shot.svg)](https://pub.dartlang.org/packages/device-preview-shot)
-[![docs](https://img.shields.io/badge/docs-latest-blue.svg)](https://aloisdeniel.github.io/flutter_device_preview)
-[![MIT License](https://img.shields.io/github/license/abraralidev/device-preview-shot.svg)](https://github.com/abraralidev/device-preview-shot/blob/main/LICENSE)
-[![GitHub Actions](https://github.com/abraralidev/device-preview-shot/actions/workflows/github-actions.yml/badge.svg?event=push)](https://github.com/abraralidev/device-preview-shot/actions/workflows/github-actions.yml?query=event%3Apush)
-[![Codacy Badge](https://app.codacy.com/project/badge/Grade/eb770d6b694640f597e8c0de21117d19)](https://app.codacy.com/gh/abraralidev/device-preview-shot/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_grade)
+[![pub package](https://img.shields.io/pub/v/device_preview_shot.svg)](https://pub.dartlang.org/packages/device_preview_shot)
+[![docs](https://img.shields.io/badge/docs-latest-blue.svg)](https://abraralidev.github.io/device_preview_shot)
+[![MIT License](https://img.shields.io/github/license/abraralidev/device_preview_shot.svg)]([https://github.com/abraralidev/device-preview-shot/blob/main/LICENSE](https://github.com/abraralidev/device-previewed-shot/blob/main/LICENSE))
 [![style: flutter_lints](https://img.shields.io/badge/style-flutter__lints-4BC0F5.svg)](https://pub.dev/packages/flutter_lints)
 
 
 > This is a fork of [device_preview](https://pub.dev/packages/device_preview) to keep it up to date with newer Flutter versions.
 
 For users migrating from the `device_preview_plus` package the only changes required are changing your `pubspec.yaml`
-file to point to `device-preview-shot` and changing any import statements to point to
-the updated `\device-preview-shot.dart`.
+file to point to `device_preview_shot` and changing any import statements to point to
+the updated `\device_preview_shot.dart`.
 
 <p align="center">
   <img src="https://github.com/aloisdeniel/flutter_device_preview/raw/master/device_preview.gif" alt="Device Preview for Flutter" />
@@ -36,7 +34,7 @@ Add this to your project's `pubspec.yaml` file:
 
 ```yml
 dependencies:
-  device-preview-shot: ^2.1.3
+  device_preview_shot: ^2.1.5
 ```
 
 ## Usage
@@ -50,7 +48,7 @@ Wrap your app's root widget in a `DevicePreview` and make sure to :
 > Make sure to override the previous properties as described. If not defined, `MediaQuery` won't be simulated for the selected device.
 
 ```dart
-import '/device-preview-shot.dart';
+import '/device_preview_shot.dart';
 
 void main() => runApp(
   DevicePreview(
