@@ -2,6 +2,11 @@ import 'dart:async';
 import 'dart:ui' as ui;
 
 import 'package:device_frame/device_frame.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:provider/provider.dart';
+
 import '/src/state/state.dart';
 import '/src/state/store.dart';
 import '/src/storage/storage.dart';
@@ -13,11 +18,6 @@ import '/src/views/tool_panel/sections/device.dart';
 import '/src/views/tool_panel/sections/settings.dart';
 import '/src/views/tool_panel/sections/system.dart';
 import '/src/views/tool_panel/tool_panel.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:provider/provider.dart';
-
 import 'locales/default_locales.dart';
 import 'utilities/screenshot.dart';
 import 'views/large.dart';
@@ -587,12 +587,12 @@ class DevicePreviewWidgetState extends State<DevicePreviewShot> {
                             data: background,
                             child: Container(
                               decoration: BoxDecoration(
-                                boxShadow: const [
-                                  BoxShadow(
-                                    blurRadius: 20,
-                                    color: Color(0xAA000000),
-                                  ),
-                                ],
+                                // boxShadow: const [
+                                //   BoxShadow(
+                                //     blurRadius: 20,
+                                //     color: Color(0xAA000000),
+                                //   ),
+                                // ],
                                 borderRadius: borderRadius,
                                 color: background.scaffoldBackgroundColor,
                               ),
