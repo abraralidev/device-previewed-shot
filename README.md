@@ -3,7 +3,6 @@
 </p>
 
 [![pub package](https://img.shields.io/pub/v/device_preview_shot.svg)](https://pub.dartlang.org/packages/device_preview_shot)
-[![docs](https://img.shields.io/badge/docs-latest-blue.svg)](https://abraralidev.github.io/device_preview_shot)
 [![MIT License](https://img.shields.io/github/license/abraralidev/device-previewed-shot.svg)](https://github.com/abraralidev/device-previewed-shot/blob/main/LICENSE)
 [![style: flutter_lints](https://img.shields.io/badge/style-flutter__lints-4BC0F5.svg)](https://pub.dev/packages/flutter_lints)
 
@@ -15,7 +14,7 @@ file to point to `device_preview_shot` and changing any import statements to poi
 the updated `device_preview_shot.dart`.
 
 <p align="center">
-  <video src="https://raw.githubusercontent.com/abraralidev/device-preview-shot/main/demo_video.mp4" autoplay loop muted playsinline width="600"></video>
+  <video src="https://res.cloudinary.com/dzlbtqgqz/video/upload/v1787659516/demo_video_eg4p7f.mp4" autoplay loop muted playsinline width="600"></video>
 </p>
 
 Approximate how your app looks and performs on another device. Main features:
