@@ -1,3 +1,13 @@
+## [2.2.0] (2026-08-25)
+
+### Features
+
+* **UI Redesign**: Completely overhauled the tool panel with a premium dark glassmorphic aesthetic.
+* **Side Navigation Rail**: Replaced the top scrolling tabs with a persistent left-hand side navigation rail.
+* **Device Model Picker**: Redesigned device and custom device selections into premium list tiles with cyan accent indicators.
+* **Accessibility**: Updated all toggle inputs and selection menus to align with the new styling.
+* **Example App**: Redesigned the example `BasicApp` into a comprehensive Device Preview Gallery showcasing theming, color blindness filters, and typography scaling.
+
 ## [2.1.3](https://github.com/abraralidev/device-preview-shot/compare/v2.1.2...v2.1.3) (2024-09-15)
 
 ### Bug Fixes

@@ -25,7 +25,10 @@ class LocalePickerState extends State<LocalePicker> {
     final selectedLocale = context.select(
       (DevicePreviewStore store) => store.data.locale,
     );
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
     return Scaffold(
+      backgroundColor: theme.scaffoldBackgroundColor,
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
         title: const Text('Locale'),
@@ -51,20 +54,47 @@ class LocalePickerState extends State<LocalePicker> {
                 ).map(
                   (locale) {
                     final isSelected = locale.code == selectedLocale;
-                    return ListTile(
-                      onTap: !isSelected
-                          ? () {
-                              final store = context.read<DevicePreviewStore>();
-                              store.data =
-                                  store.data.copyWith(locale: locale.code);
-                              Navigator.pop(context);
-                            }
-                          : null,
-                      title: Text(
-                        locale.name,
-                      ),
-                      subtitle: Text(
-                        locale.code,
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                      child: ListTile(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                          side: isSelected
+                              ? const BorderSide(color: Color(0xFF00E5FF), width: 1)
+                              : BorderSide.none,
+                        ),
+                        tileColor: isSelected
+                            ? const Color(0xFF00E5FF).withValues(alpha: 0.1)
+                            : (isDark ? const Color(0xFF1A1A2E) : Colors.white),
+                        onTap: !isSelected
+                            ? () {
+                                final store = context.read<DevicePreviewStore>();
+                                store.data =
+                                    store.data.copyWith(locale: locale.code);
+                                Navigator.pop(context);
+                              }
+                            : null,
+                        title: Text(
+                          locale.name,
+                          style: TextStyle(
+                            fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
+                            color: isSelected
+                                ? const Color(0xFF00E5FF)
+                                : theme.textTheme.bodyMedium?.color,
+                          ),
+                        ),
+                        subtitle: Text(
+                          locale.code,
+                          style: TextStyle(
+                            fontSize: 12,
+                            color: isSelected
+                                ? const Color(0xFF00E5FF).withValues(alpha: 0.8)
+                                : theme.hintColor,
+                          ),
+                        ),
+                        trailing: isSelected
+                            ? const Icon(Icons.check_circle_rounded, color: Color(0xFF00E5FF), size: 20)
+                            : null,
                       ),
                     );
                   },

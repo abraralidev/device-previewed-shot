@@ -1,5 +1,6 @@
 import '/src/state/store.dart';
 import '/src/views/tool_panel/sections/subsections/locale.dart';
+import '/src/views/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -49,11 +50,20 @@ class SystemSection extends StatelessWidget {
             key: const Key('locale'),
             title: const Text('Locale'),
             subtitle: Text(selectedLocale.name),
-            trailing: const Row(
+            trailing: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Icon(Icons.language),
-                Icon(Icons.chevron_right_rounded),
+                Icon(
+                  Icons.language_rounded,
+                  size: 18,
+                  color: kAccentColor.withValues(alpha: 0.8),
+                ),
+                const SizedBox(width: 4),
+                Icon(
+                  Icons.chevron_right_rounded,
+                  size: 18,
+                  color: kMutedText,
+                ),
               ],
             ),
             onTap: () {
@@ -72,15 +82,37 @@ class SystemSection extends StatelessWidget {
         if (theme)
           ListTile(
             key: const Key('theme'),
-            title: const Text('Theme'),
-            subtitle: Text(isDarkMode ? 'Dark' : 'Light'),
-            trailing: Icon(
-              isDarkMode ? Icons.brightness_3 : Icons.brightness_high,
+            title: const Text('Dark mode'),
+            trailing: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                AnimatedSwitcher(
+                  duration: const Duration(milliseconds: 250),
+                  transitionBuilder: (child, animation) => RotationTransition(
+                    turns: Tween(begin: 0.75, end: 1.0).animate(animation),
+                    child: FadeTransition(opacity: animation, child: child),
+                  ),
+                  child: Icon(
+                    isDarkMode
+                        ? Icons.dark_mode_rounded
+                        : Icons.light_mode_rounded,
+                    key: ValueKey(isDarkMode),
+                    size: 18,
+                    color: isDarkMode
+                        ? kAccentColor.withValues(alpha: 0.8)
+                        : const Color(0xFFFFAB40),
+                  ),
+                ),
+                const SizedBox(width: 8),
+                Switch(
+                  value: isDarkMode,
+                  onChanged: (v) {
+                    final state = context.read<DevicePreviewStore>();
+                    state.toggleDarkMode();
+                  },
+                ),
+              ],
             ),
-            onTap: () {
-              final state = context.read<DevicePreviewStore>();
-              state.toggleDarkMode();
-            },
           ),
       ],
     );

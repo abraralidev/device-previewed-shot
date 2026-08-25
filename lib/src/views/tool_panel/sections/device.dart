@@ -5,6 +5,7 @@ import '/src/views/tool_panel/widgets/target_platform_icon.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '/src/views/theme.dart';
 import 'section.dart';
 
 /// All the simulated properties for the device.
@@ -72,13 +73,16 @@ class DeviceSection extends StatelessWidget {
                 TargetPlatformIcon(
                   platform: deviceIdentifier.platform,
                 ),
-                const SizedBox(
-                  width: 8,
-                ),
+                const SizedBox(width: 6),
                 DeviceTypeIcon(
                   type: deviceIdentifier.type,
                 ),
-                const Icon(Icons.chevron_right_rounded),
+                const SizedBox(width: 4),
+                Icon(
+                  Icons.chevron_right_rounded,
+                  size: 18,
+                  color: kMutedText,
+                ),
               ],
             ),
             onTap: () {
@@ -99,14 +103,7 @@ class DeviceSection extends StatelessWidget {
             key: const Key('orientation'),
             title: const Text('Orientation'),
             subtitle: Text(
-              () {
-                switch (orientation) {
-                  case Orientation.landscape:
-                    return 'Landscape';
-                  case Orientation.portrait:
-                    return 'Portrait';
-                }
-              }(),
+              orientation == Orientation.landscape ? 'Landscape' : 'Portrait',
             ),
             trailing: AnimatedContainer(
               duration: const Duration(milliseconds: 200),
@@ -114,7 +111,11 @@ class DeviceSection extends StatelessWidget {
               transform: Matrix4.rotationZ(
                 orientation == Orientation.landscape ? 2.35 : 0.75,
               ),
-              child: const Icon(Icons.screen_rotation),
+              child: Icon(
+                Icons.screen_rotation_rounded,
+                size: 20,
+                color: kAccentColor.withValues(alpha: 0.8),
+              ),
             ),
             onTap: () {
               final state = context.read<DevicePreviewStore>();
@@ -125,37 +126,25 @@ class DeviceSection extends StatelessWidget {
           ListTile(
             key: const Key('frame'),
             title: const Text('Frame visibility'),
-            subtitle: Text(isFrameVisible ? 'Visible' : 'Hidden'),
-            trailing: Opacity(
-              opacity: isFrameVisible ? 1.0 : 0.3,
-              child: Icon(
-                isFrameVisible
-                    ? Icons.border_outer_rounded
-                    : Icons.border_clear_rounded,
-              ),
+            trailing: Switch(
+              value: isFrameVisible,
+              onChanged: (v) {
+                final state = context.read<DevicePreviewStore>();
+                state.toggleFrame();
+              },
             ),
-            onTap: () {
-              final state = context.read<DevicePreviewStore>();
-              state.toggleFrame();
-            },
           ),
         if (virtualKeyboard)
           ListTile(
             key: const Key('keyboard'),
-            title: const Text('Virtual keyboard preview'),
-            subtitle: Text(isVirtualKeyboardVisible ? 'Visible' : 'Hidden'),
-            trailing: Opacity(
-              opacity: isVirtualKeyboardVisible ? 1.0 : 0.3,
-              child: Icon(
-                isVirtualKeyboardVisible
-                    ? Icons.keyboard
-                    : Icons.keyboard_outlined,
-              ),
+            title: const Text('Virtual keyboard'),
+            trailing: Switch(
+              value: isVirtualKeyboardVisible,
+              onChanged: (v) {
+                final state = context.read<DevicePreviewStore>();
+                state.toggleVirtualKeyboard();
+              },
             ),
-            onTap: () {
-              final state = context.read<DevicePreviewStore>();
-              state.toggleVirtualKeyboard();
-            },
           ),
       ],
     );

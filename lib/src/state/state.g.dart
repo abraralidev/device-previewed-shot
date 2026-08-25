@@ -6,9 +6,8 @@ part of 'state.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$DevicePreviewDataImpl _$$DevicePreviewDataImplFromJson(
-        Map<String, dynamic> json) =>
-    _$DevicePreviewDataImpl(
+_DevicePreviewData _$DevicePreviewDataFromJson(Map<String, dynamic> json) =>
+    _DevicePreviewData(
       isToolbarVisible: json['isToolbarVisible'] as bool? ?? true,
       isEnabled: json['isEnabled'] as bool? ?? true,
       orientation:
@@ -38,10 +37,12 @@ _$DevicePreviewDataImpl _$$DevicePreviewDataImplFromJson(
           ? null
           : CustomDeviceInfoData.fromJson(
               json['customDevice'] as Map<String, dynamic>),
+      colorBlindness: $enumDecodeNullable(
+              _$ColorBlindnessTypeEnumMap, json['colorBlindness']) ??
+          ColorBlindnessType.none,
     );
 
-Map<String, dynamic> _$$DevicePreviewDataImplToJson(
-        _$DevicePreviewDataImpl instance) =>
+Map<String, dynamic> _$DevicePreviewDataToJson(_DevicePreviewData instance) =>
     <String, dynamic>{
       'isToolbarVisible': instance.isToolbarVisible,
       'isEnabled': instance.isEnabled,
@@ -60,6 +61,7 @@ Map<String, dynamic> _$$DevicePreviewDataImplToJson(
       'textScaleFactor': instance.textScaleFactor,
       'settings': instance.settings,
       'customDevice': instance.customDevice,
+      'colorBlindness': _$ColorBlindnessTypeEnumMap[instance.colorBlindness]!,
     };
 
 const _$OrientationEnumMap = {
@@ -67,9 +69,17 @@ const _$OrientationEnumMap = {
   Orientation.landscape: 'landscape',
 };
 
-_$CustomDeviceInfoDataImpl _$$CustomDeviceInfoDataImplFromJson(
+const _$ColorBlindnessTypeEnumMap = {
+  ColorBlindnessType.none: 'none',
+  ColorBlindnessType.protanopia: 'protanopia',
+  ColorBlindnessType.deuteranopia: 'deuteranopia',
+  ColorBlindnessType.tritanopia: 'tritanopia',
+  ColorBlindnessType.achromatopsia: 'achromatopsia',
+};
+
+_CustomDeviceInfoData _$CustomDeviceInfoDataFromJson(
         Map<String, dynamic> json) =>
-    _$CustomDeviceInfoDataImpl(
+    _CustomDeviceInfoData(
       id: json['id'] as String,
       type: $enumDecode(_$DeviceTypeEnumMap, json['type']),
       platform: $enumDecode(_$TargetPlatformEnumMap, json['platform']),
@@ -83,8 +93,8 @@ _$CustomDeviceInfoDataImpl _$$CustomDeviceInfoDataImplFromJson(
       screenSize: const SizeJsonConverter().fromJson(json['screenSize']),
     );
 
-Map<String, dynamic> _$$CustomDeviceInfoDataImplToJson(
-        _$CustomDeviceInfoDataImpl instance) =>
+Map<String, dynamic> _$CustomDeviceInfoDataToJson(
+        _CustomDeviceInfoData instance) =>
     <String, dynamic>{
       'id': instance.id,
       'type': _$DeviceTypeEnumMap[instance.type]!,
@@ -115,9 +125,9 @@ const _$TargetPlatformEnumMap = {
   TargetPlatform.windows: 'windows',
 };
 
-_$DevicePreviewSettingsDataImpl _$$DevicePreviewSettingsDataImplFromJson(
+_DevicePreviewSettingsData _$DevicePreviewSettingsDataFromJson(
         Map<String, dynamic> json) =>
-    _$DevicePreviewSettingsDataImpl(
+    _DevicePreviewSettingsData(
       toolbarPosition: $enumDecodeNullable(
               _$DevicePreviewToolBarPositionDataEnumMap,
               json['toolbarPosition']) ??
@@ -131,8 +141,8 @@ _$DevicePreviewSettingsDataImpl _$$DevicePreviewSettingsDataImplFromJson(
           DevicePreviewBackgroundThemeData.light,
     );
 
-Map<String, dynamic> _$$DevicePreviewSettingsDataImplToJson(
-        _$DevicePreviewSettingsDataImpl instance) =>
+Map<String, dynamic> _$DevicePreviewSettingsDataToJson(
+        _DevicePreviewSettingsData instance) =>
     <String, dynamic>{
       'toolbarPosition':
           _$DevicePreviewToolBarPositionDataEnumMap[instance.toolbarPosition]!,

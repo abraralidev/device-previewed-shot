@@ -1,4 +1,5 @@
-import '/src/state/store.dart';
+import 'package:device_preview_shot/device_preview_shot.dart';
+
 import '/src/views/theme.dart';
 import '/src/views/tool_panel/tool_panel.dart';
 import 'package:flutter/material.dart';
@@ -39,6 +40,9 @@ class DervicePreviewLargeLayoutState extends State<DervicePreviewLargeLayout> {
     final toolbarTheme = context.select(
       (DevicePreviewStore store) => store.settings.toolbarTheme,
     );
+    final isDark =
+        toolbarTheme == DevicePreviewToolBarThemeData.dark;
+
     return Theme(
       data: toolbarTheme.asThemeData(),
       child: Directionality(
@@ -54,24 +58,26 @@ class DervicePreviewLargeLayoutState extends State<DervicePreviewLargeLayout> {
             children: [
               Positioned(
                 top: 0,
-                right: 0,
+                left: 0,
                 bottom: 0,
                 width: ToolPanel.panelWidth,
-                child: MediaQuery(
-                  data: mediaQuery.copyWith(
-                    padding: mediaQuery.padding.copyWith(left: 0) +
-                        const EdgeInsets.only(left: 40),
+                child: Container(
+                  decoration: BoxDecoration(
+                    border: Border(
+                      right: BorderSide(
+                        color: isDark ? kBorderDark : const Color(0xFFE0E4EA),
+                        width: 0.5,
+                      ),
+                    ),
                   ),
-                  child: Navigator(
-                    onGenerateInitialRoutes: (navigator, initialRoute) {
-                      return [
-                        MaterialPageRoute(
-                          builder: (context) => ToolPanel(
-                            slivers: widget.slivers,
-                          ),
-                        ),
-                      ];
-                    },
+                  child: MediaQuery(
+                    data: mediaQuery.copyWith(
+                      padding: mediaQuery.padding.copyWith(left: 0) +
+                          const EdgeInsets.only(left: 40),
+                    ),
+                    child: ToolPanel(
+                      slivers: widget.slivers,
+                    ),
                   ),
                 ),
               ),

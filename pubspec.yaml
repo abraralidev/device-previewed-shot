@@ -1,28 +1,28 @@
 name: device_preview_shot
-version: 2.1.5
+version: 2.2.0
 description: Approximate how your Flutter app looks and performs on another device
 homepage: https://github.com/abraralidev/device-previewed-shot
 
 environment:
-  sdk: ">=3.5.3 <4.0.0"
-  flutter: ">=3.47.0"
+  sdk: ">=3.8.0 <4.0.0"
+  flutter: ">=3.44.8"
 
 dependencies:
   flutter:
     sdk: flutter
   flutter_localizations:
     sdk: flutter
-  provider: ^6.1.2
-  device_frame: ^1.2.0
-  freezed_annotation: ^2.4.4
-  json_annotation: ^4.9.0
-  shared_preferences: ^2.3.2
-  collection: ^1.18.0
+  provider: ^6.1.5
+  device_frame: ^1.4.0
+  freezed_annotation: ^3.1.0
+  json_annotation: ^4.12.0
+  shared_preferences: ^2.5.5
+  collection: ^1.19.1
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  flutter_lints: 4.0.0
-  build_runner: 2.4.12
-  freezed: 2.5.7
-  json_serializable: 6.8.0
+  flutter_lints: 6.0.0
+  build_runner: ^2.15.1
+  freezed: ^3.0.1
+  json_serializable: 6.14.1

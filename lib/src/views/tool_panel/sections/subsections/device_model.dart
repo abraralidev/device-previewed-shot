@@ -1,11 +1,11 @@
 import 'package:collection/collection.dart';
 import 'package:device_frame/device_frame.dart';
-import '/src/state/store.dart';
-import '/src/views/tool_panel/widgets/device_type_icon.dart';
-import '/src/views/tool_panel/widgets/target_platform_icon.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '/src/state/store.dart';
+import '/src/views/tool_panel/widgets/device_type_icon.dart';
+import '/src/views/tool_panel/widgets/target_platform_icon.dart';
 import '../section.dart';
 
 part 'custom_device.dart';
@@ -57,12 +57,22 @@ class _DeviceModelPickerState extends State<DeviceModelPicker>
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Scaffold(
+      backgroundColor: theme.scaffoldBackgroundColor,
       appBar: AppBar(
         title: const Text('Device model'),
         bottom: TabBar(
           controller: controller,
           isScrollable: true,
+          indicatorSize: TabBarIndicatorSize.tab,
+          indicatorPadding: const EdgeInsets.symmetric(vertical: 6, horizontal: 4),
+          indicator: BoxDecoration(
+            color: const Color(0xFF00E5FF).withValues(alpha: 0.1),
+            borderRadius: BorderRadius.circular(12),
+            border: Border.all(color: const Color(0xFF00E5FF).withValues(alpha: 0.5)),
+          ),
+          dividerColor: Colors.transparent,
           tabs: [
             ..._allPlatforms.map(
               (e) => Tab(
@@ -86,8 +96,9 @@ class _DeviceModelPickerState extends State<DeviceModelPicker>
               platform: e,
             ),
           ),
-          CustomScrollView(
-            slivers: [
+          ListView(
+            padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 8),
+            children: [
               ...buildCustomDeviceTiles(context),
             ],
           ),
@@ -188,19 +199,68 @@ class DeviceTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListTile(
-      title: Text(info.name),
-      leading: DeviceTypeIcon(type: info.identifier.type),
-      subtitle: Text(
-        '${info.screenSize.width}x${info.screenSize.height} @${info.pixelRatio}',
-        style: const TextStyle(
-          fontSize: 10,
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+    
+    final selectedIdentifier = context.select(
+      (DevicePreviewStore store) => store.deviceInfo.identifier,
+    );
+    final isSelected = selectedIdentifier == info.identifier;
+    final isCustom = context.select(
+      (DevicePreviewStore store) => store.isCustomDevice,
+    );
+
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+      child: ListTile(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10),
+          side: isSelected && !isCustom
+              ? const BorderSide(color: Color(0xFF00E5FF), width: 1)
+              : BorderSide.none,
         ),
+        tileColor: isSelected && !isCustom
+            ? const Color(0xFF00E5FF).withValues(alpha: 0.1)
+            : (isDark ? const Color(0xFF1A1A2E) : Colors.white),
+        title: Text(
+          info.name,
+          style: TextStyle(
+            fontWeight: isSelected && !isCustom ? FontWeight.w600 : FontWeight.normal,
+            color: isSelected && !isCustom
+                ? const Color(0xFF00E5FF)
+                : theme.textTheme.bodyMedium?.color,
+          ),
+        ),
+        leading: Container(
+          width: 36,
+          height: 36,
+          decoration: BoxDecoration(
+            color: isSelected && !isCustom
+                ? const Color(0xFF00E5FF).withValues(alpha: 0.2)
+                : theme.cardColor,
+            borderRadius: BorderRadius.circular(8),
+          ),
+          child: DeviceTypeIcon(
+            type: info.identifier.type,
+          ),
+        ),
+        subtitle: Text(
+          '${info.screenSize.width}x${info.screenSize.height} @${info.pixelRatio}',
+          style: TextStyle(
+            fontSize: 11,
+            color: isSelected && !isCustom
+                ? const Color(0xFF00E5FF).withValues(alpha: 0.8)
+                : theme.hintColor,
+          ),
+        ),
+        trailing: isSelected && !isCustom
+            ? const Icon(Icons.check_circle_rounded, color: Color(0xFF00E5FF), size: 20)
+            : null,
+        onTap: () {
+          final state = context.read<DevicePreviewStore>();
+          state.selectDevice(info.identifier);
+        },
       ),
-      onTap: () {
-        final state = context.read<DevicePreviewStore>();
-        state.selectDevice(info.identifier);
-      },
     );
   }
 }

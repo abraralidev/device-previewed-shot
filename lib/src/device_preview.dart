@@ -10,11 +10,12 @@ import 'package:provider/provider.dart';
 import '/src/state/state.dart';
 import '/src/state/store.dart';
 import '/src/storage/storage.dart';
-import '/src/utilities/assert_inherited_media_query.dart';
+import '/src/utilities/color_blindness.dart';
 import '/src/utilities/media_query_observer.dart';
 import '/src/views/theme.dart';
 import '/src/views/tool_panel/sections/accessibility.dart';
 import '/src/views/tool_panel/sections/device.dart';
+import '/src/views/tool_panel/sections/screenshot.dart';
 import '/src/views/tool_panel/sections/settings.dart';
 import '/src/views/tool_panel/sections/system.dart';
 import '/src/views/tool_panel/tool_panel.dart';
@@ -112,6 +113,7 @@ class DevicePreviewShot extends StatefulWidget {
     SystemSection(),
     AccessibilitySection(),
     SettingsSection(),
+    ScreenshotSection(),
   ];
 
   @override
@@ -119,9 +121,7 @@ class DevicePreviewShot extends StatefulWidget {
 
   /// The currently selected device.
   static DeviceInfo selectedDevice(BuildContext context) {
-    return context.select(
-      (DevicePreviewStore store) => store.deviceInfo,
-    );
+    return context.select((DevicePreviewStore store) => store.deviceInfo);
   }
 
   /// The simulated target platform for the currently selected device.
@@ -221,10 +221,7 @@ class DevicePreviewShot extends StatefulWidget {
   ///
   /// If [enablePreview] is set to `true`, then the device preview is also enabled
   /// when appearing.
-  static void showToolbar(
-    BuildContext context, {
-    bool enablePreview = true,
-  }) {
+  static void showToolbar(BuildContext context, {bool enablePreview = true}) {
     final store = Provider.of<DevicePreviewStore>(context);
     store.data = store.data.copyWith(
       isToolbarVisible: true,
@@ -236,10 +233,7 @@ class DevicePreviewShot extends StatefulWidget {
   ///
   /// If [disablePreview] is set to `false`, then the device preview stays active even
   /// if the toolbar is not visible anymore.
-  static void hideToolbar(
-    BuildContext context, {
-    bool disablePreview = true,
-  }) {
+  static void hideToolbar(BuildContext context, {bool disablePreview = true}) {
     final store = Provider.of<DevicePreviewStore>(context);
     store.data = store.data.copyWith(
       isToolbarVisible: false,
@@ -367,9 +361,7 @@ class DevicePreviewWidgetState extends State<DevicePreviewShot> {
     final image = await boundary.toImage(
       pixelRatio: store.deviceInfo.pixelRatio,
     );
-    final byteData = await image.toByteData(
-      format: format,
-    );
+    final byteData = await image.toByteData(format: format);
     final bytes = byteData!.buffer.asUint8List();
     final screenshot = DeviceScreenshot(
       device: store.deviceInfo,
@@ -421,6 +413,9 @@ class DevicePreviewWidgetState extends State<DevicePreviewShot> {
     final isDarkMode = context.select(
       (DevicePreviewStore store) => store.data.isDarkMode,
     );
+    final colorBlindness = context.select(
+      (DevicePreviewStore store) => store.data.colorBlindness,
+    );
 
     return Container(
       color: widget.backgroundColor ?? theme.canvasColor,
@@ -450,11 +445,16 @@ class DevicePreviewWidgetState extends State<DevicePreviewShot> {
                   child: Builder(
                     key: _appKey,
                     builder: (context) {
-                      final app = widget.builder(context);
-                      assert(
-                        isWidgetsAppUsingInheritedMediaQuery(app),
-                        'Your widgets app should have its `useInheritedMediaQuery` property set to `true` in order to use DevicePreview.',
+                      Widget app = widget.builder(context);
+                      final filter = ColorBlindnessFilters.getFilter(
+                        colorBlindness,
                       );
+                      if (filter != null) {
+                        app = ColorFiltered(
+                          colorFilter: ColorFilter.matrix(filter),
+                          child: app,
+                        );
+                      }
                       return app;
                     },
                   ),
@@ -470,10 +470,7 @@ class DevicePreviewWidgetState extends State<DevicePreviewShot> {
   @override
   Widget build(BuildContext context) {
     if (!widget.enabled) {
-      return Builder(
-        key: _appKey,
-        builder: widget.builder,
-      );
+      return Builder(key: _appKey, builder: widget.builder);
     }
     final preferredLocales = View.of(context).platformDispatcher.locales;
 
@@ -494,10 +491,7 @@ class DevicePreviewWidgetState extends State<DevicePreviewShot> {
         );
 
         if (!isInitialized) {
-          return Builder(
-            key: _appKey,
-            builder: widget.builder,
-          );
+          return Builder(key: _appKey, builder: widget.builder);
         }
 
         final isEnabled = context.select(
@@ -512,7 +506,8 @@ class DevicePreviewWidgetState extends State<DevicePreviewShot> {
           (DevicePreviewStore store) => store.settings.backgroundTheme,
         );
 
-        final isToolbarVisible = widget.isToolbarVisible &&
+        final isToolbarVisible =
+            widget.isToolbarVisible &&
             context.select(
               (DevicePreviewStore store) => store.data.isToolbarVisible,
             );
@@ -545,13 +540,14 @@ class DevicePreviewWidgetState extends State<DevicePreviewShot> {
                                 : Radius.zero,
                           )
                         : BorderRadius.zero;
-                    final double rightPanelOffset = !isSmall
+                    final double leftPanelOffset = !isSmall
                         ? (isEnabled
-                            ? ToolPanel.panelWidth - 10
-                            : (64 + mediaQuery.padding.right))
+                              ? ToolPanel.panelWidth - 10
+                              : (64 + mediaQuery.padding.left))
                         : 0;
-                    final double bottomPanelOffset =
-                        isSmall ? mediaQuery.padding.bottom + 52 : 0;
+                    final double bottomPanelOffset = isSmall
+                        ? mediaQuery.padding.bottom + 52
+                        : 0;
                     return Stack(
                       children: <Widget>[
                         if (isToolbarVisible && isSmall)
@@ -579,29 +575,21 @@ class DevicePreviewWidgetState extends State<DevicePreviewShot> {
                         AnimatedPositioned(
                           key: const Key('preview'),
                           duration: const Duration(milliseconds: 200),
-                          left: 0,
-                          right: isToolbarVisible ? rightPanelOffset : 0,
+                          left: isToolbarVisible ? leftPanelOffset : 0,
+                          right: 0,
                           top: 0,
                           bottom: isToolbarVisible ? bottomPanelOffset : 0,
                           child: Theme(
                             data: background,
                             child: Container(
                               decoration: BoxDecoration(
-                                // boxShadow: const [
-                                //   BoxShadow(
-                                //     blurRadius: 20,
-                                //     color: Color(0xAA000000),
-                                //   ),
-                                // ],
                                 borderRadius: borderRadius,
                                 color: background.scaffoldBackgroundColor,
                               ),
                               child: ClipRRect(
                                 borderRadius: borderRadius,
                                 child: isEnabled
-                                    ? Builder(
-                                        builder: _buildPreview,
-                                      )
+                                    ? Builder(builder: _buildPreview)
                                     : Builder(
                                         key: _appKey,
                                         builder: widget.builder,

@@ -34,7 +34,7 @@ class DevicePreviewState with _$DevicePreviewState {
 /// A [DevicePreviewShot] configuration snapshot that can be
 /// serialized to be persisted between sessions.
 @freezed
-class DevicePreviewData with _$DevicePreviewData {
+abstract class DevicePreviewData with _$DevicePreviewData {
   /// Create a new [DevicePreviewData] configuration from all
   /// properties.
   const factory DevicePreviewData({
@@ -77,7 +77,7 @@ class DevicePreviewData with _$DevicePreviewData {
     /// Indicate whether image colors are inverted.
     @Default(false) bool invertColors,
 
-    /// Indicate whether image colors are inverted.
+    /// Plugin-specific persisted data.
     @Default(<String, Map<String, dynamic>>{})
     Map<String, Map<String, dynamic>> pluginData,
 
@@ -87,15 +87,27 @@ class DevicePreviewData with _$DevicePreviewData {
 
     /// The custom device configuration
     @Default(null) CustomDeviceInfoData? customDevice,
+
+    /// The active color blindness simulation type.
+    @Default(ColorBlindnessType.none) ColorBlindnessType colorBlindness,
   }) = _DevicePreviewData;
 
   factory DevicePreviewData.fromJson(Map<String, dynamic> json) =>
       _$DevicePreviewDataFromJson(json);
 }
 
+/// The types of color blindness that can be simulated.
+enum ColorBlindnessType {
+  none,
+  protanopia,
+  deuteranopia,
+  tritanopia,
+  achromatopsia,
+}
+
 /// Info about a device and its frame.
 @freezed
-class CustomDeviceInfoData with _$CustomDeviceInfoData {
+abstract class CustomDeviceInfoData with _$CustomDeviceInfoData {
   /// Create a new device info.
   const factory CustomDeviceInfoData({
     /// Identifier of the device.
@@ -151,19 +163,8 @@ abstract class DevicePreviewSettingsData with _$DevicePreviewSettingsData {
       _$DevicePreviewSettingsDataFromJson(json);
 }
 
-enum DevicePreviewToolBarThemeData {
-  dark,
-  light,
-}
+enum DevicePreviewToolBarThemeData { dark, light }
 
-enum DevicePreviewBackgroundThemeData {
-  dark,
-  light,
-}
+enum DevicePreviewBackgroundThemeData { dark, light }
 
-enum DevicePreviewToolBarPositionData {
-  bottom,
-  top,
-  left,
-  right,
-}
+enum DevicePreviewToolBarPositionData { bottom, top, left, right }

@@ -4,7 +4,7 @@
 
 [![pub package](https://img.shields.io/pub/v/device_preview_shot.svg)](https://pub.dartlang.org/packages/device_preview_shot)
 [![docs](https://img.shields.io/badge/docs-latest-blue.svg)](https://abraralidev.github.io/device_preview_shot)
-[![MIT License](https://img.shields.io/github/license/abraralidev/device_preview_shot.svg)]([https://github.com/abraralidev/device-preview-shot/blob/main/LICENSE](https://github.com/abraralidev/device-previewed-shot/blob/main/LICENSE))
+[![MIT License](https://img.shields.io/github/license/abraralidev/device-previewed-shot.svg)](https://github.com/abraralidev/device-previewed-shot/blob/main/LICENSE)
 [![style: flutter_lints](https://img.shields.io/badge/style-flutter__lints-4BC0F5.svg)](https://pub.dev/packages/flutter_lints)
 
 
@@ -12,17 +12,18 @@
 
 For users migrating from the `device_preview_plus` package the only changes required are changing your `pubspec.yaml`
 file to point to `device_preview_shot` and changing any import statements to point to
-the updated `\device_preview_shot.dart`.
+the updated `device_preview_shot.dart`.
 
 <p align="center">
-  <img src="https://github.com/aloisdeniel/flutter_device_preview/raw/master/device_preview.gif" alt="Device Preview for Flutter" />
+  <video src="https://raw.githubusercontent.com/abraralidev/device-preview-shot/main/demo_video.mp4" autoplay loop muted playsinline width="600"></video>
 </p>
 
 Approximate how your app looks and performs on another device. Main features:
 
 * Preview any device from any device
+* Premium dark glassmorphic tool panel with side navigation
 * Change the device orientation
-* Dynamic system configuration (*language, dark mode, text scaling factor, ...)*
+* Dynamic system configuration (*language, dark mode, text scaling factor, color blindness, ...)*
 * Freeform device with adjustable resolution and safe areas
 * Keep the application state
 * Plugin system (*Screenshot, File explorer, ...*)
@@ -34,24 +35,23 @@ Add this to your project's `pubspec.yaml` file:
 
 ```yml
 dependencies:
-  device_preview_shot: ^2.1.5
+  device_preview_shot: ^2.2.0
 ```
 
 ## Usage
 
-Wrap your app's root widget in a `DevicePreview` and make sure to :
+Wrap your app's root widget in a `DevicePreviewShot` and make sure to :
 
-* Set your app's `useInheritedMediaQuery` to `true`.
-* Set your app's `builder` to `DevicePreview.appBuilder`.
-* Set your app's `locale` to `DevicePreview.locale(context)`.
+* Set your app's `builder` to `DevicePreviewShot.appBuilder`.
+* Set your app's `locale` to `DevicePreviewShot.locale(context)`.
 
 > Make sure to override the previous properties as described. If not defined, `MediaQuery` won't be simulated for the selected device.
 
 ```dart
-import '/device_preview_shot.dart';
+import 'package:device_preview_shot/device_preview_shot.dart';
 
 void main() => runApp(
-  DevicePreview(
+  DevicePreviewShot(
     enabled: !kReleaseMode,
     builder: (context) => MyApp(), // Wrap your app
   ),
@@ -61,9 +61,8 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      useInheritedMediaQuery: true,
-      locale: DevicePreview.locale(context),
-      builder: DevicePreview.appBuilder,
+      locale: DevicePreviewShot.locale(context),
+      builder: DevicePreviewShot.appBuilder,
       theme: ThemeData.light(),
       darkTheme: ThemeData.dark(),
       home: const HomePage(),
@@ -74,7 +73,7 @@ class MyApp extends StatelessWidget {
 
 ## Demo
 
-<a href='https://flutter-device-preview.firebaseapp.com/' target='_blank'>Open the demo</a>
+<a href='https://device-previewed-shot.surge.sh' target='_blank'>Open the demo</a>
 
 ## Limitations
 

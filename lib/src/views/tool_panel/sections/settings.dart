@@ -30,71 +30,111 @@ class SettingsSection extends StatelessWidget {
     );
     final background = backgroundTheme.asThemeData();
     final toolbar = toolbarTheme.asThemeData();
+
     return ToolPanelSection(
       title: 'Preview settings',
       children: [
         if (this.backgroundTheme)
           ListTile(
             key: const Key('background-theme'),
-            title: const Text('Background color'),
-            subtitle: Text(
-              backgroundTheme == DevicePreviewBackgroundThemeData.dark
-                  ? 'Dark'
-                  : 'Light',
-            ),
-            trailing: Container(
-              width: 24,
-              height: 24,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: background.scaffoldBackgroundColor,
-                border: Border.all(
-                  color: toolbar.colorScheme.surface,
-                  width: 1,
+            title: const Text('Background'),
+            trailing: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                _ThemeIndicator(
+                  color: background.scaffoldBackgroundColor,
+                  borderColor: toolbar.colorScheme.surface,
+                  isDark:
+                      backgroundTheme == DevicePreviewBackgroundThemeData.dark,
                 ),
-              ),
+                const SizedBox(width: 8),
+                Switch(
+                  value:
+                      backgroundTheme == DevicePreviewBackgroundThemeData.dark,
+                  onChanged: (v) {
+                    final state = context.read<DevicePreviewStore>();
+                    state.settings = state.settings.copyWith(
+                      backgroundTheme: v
+                          ? DevicePreviewBackgroundThemeData.dark
+                          : DevicePreviewBackgroundThemeData.light,
+                    );
+                  },
+                ),
+              ],
             ),
-            onTap: () {
-              final state = context.read<DevicePreviewStore>();
-              state.settings = state.settings.copyWith(
-                backgroundTheme:
-                    backgroundTheme == DevicePreviewBackgroundThemeData.dark
-                        ? DevicePreviewBackgroundThemeData.light
-                        : DevicePreviewBackgroundThemeData.dark,
-              );
-            },
           ),
         if (toolsTheme)
           ListTile(
             key: const Key('toolbar-theme'),
             title: const Text('Tools theme'),
-            subtitle: Text(
-              toolbarTheme == DevicePreviewToolBarThemeData.dark
-                  ? 'Dark'
-                  : 'Light',
-            ),
-            trailing: Container(
-              width: 24,
-              height: 24,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: toolbar.scaffoldBackgroundColor,
-                border: Border.all(
-                  color: toolbar.colorScheme.surface,
-                  width: 1,
+            trailing: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                _ThemeIndicator(
+                  color: toolbar.scaffoldBackgroundColor,
+                  borderColor: toolbar.colorScheme.surface,
+                  isDark: toolbarTheme == DevicePreviewToolBarThemeData.dark,
                 ),
-              ),
+                const SizedBox(width: 8),
+                Switch(
+                  value: toolbarTheme == DevicePreviewToolBarThemeData.dark,
+                  onChanged: (v) {
+                    final state = context.read<DevicePreviewStore>();
+                    state.settings = state.settings.copyWith(
+                      toolbarTheme: v
+                          ? DevicePreviewToolBarThemeData.dark
+                          : DevicePreviewToolBarThemeData.light,
+                    );
+                  },
+                ),
+              ],
             ),
-            onTap: () {
-              final state = context.read<DevicePreviewStore>();
-              state.settings = state.settings.copyWith(
-                toolbarTheme: toolbarTheme == DevicePreviewToolBarThemeData.dark
-                    ? DevicePreviewToolBarThemeData.light
-                    : DevicePreviewToolBarThemeData.dark,
-              );
-            },
           ),
       ],
+    );
+  }
+}
+
+class _ThemeIndicator extends StatelessWidget {
+  const _ThemeIndicator({
+    required this.color,
+    required this.borderColor,
+    required this.isDark,
+  });
+
+  final Color color;
+  final Color borderColor;
+  final bool isDark;
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedContainer(
+      duration: const Duration(milliseconds: 250),
+      width: 22,
+      height: 22,
+      decoration: BoxDecoration(
+        shape: BoxShape.circle,
+        color: color,
+        border: Border.all(
+          color: isDark
+              ? kAccentColor.withValues(alpha: 0.4)
+              : const Color(0xFFCCCCDD),
+          width: 1.5,
+        ),
+        boxShadow: isDark
+            ? [
+                BoxShadow(
+                  color: kAccentColor.withValues(alpha: 0.15),
+                  blurRadius: 6,
+                ),
+              ]
+            : null,
+      ),
+      child: Icon(
+        isDark ? Icons.dark_mode_rounded : Icons.light_mode_rounded,
+        size: 12,
+        color: isDark ? kAccentColor : const Color(0xFFFFAB40),
+      ),
     );
   }
 }

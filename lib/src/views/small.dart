@@ -45,8 +45,8 @@ class DevicePreviewSmallLayout extends StatelessWidget {
             final sheet = scaffoldKey.currentState?.showBottomSheet(
               (context) => ClipRRect(
                 borderRadius: const BorderRadius.only(
-                  topLeft: Radius.circular(10),
-                  topRight: Radius.circular(10),
+                  topLeft: Radius.circular(16),
+                  topRight: Radius.circular(16),
                 ),
                 child: ToolPanel(
                   isModal: true,
@@ -76,20 +76,67 @@ class _BottomToolbar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
     final isEnabled = context.select(
       (DevicePreviewStore store) => store.data.isEnabled,
     );
-    return Material(
-      child: ListTile(
-        title: const Text('Device Preview'),
-        onTap: isEnabled ? showPanel : null,
-        leading: const Icon(Icons.tune),
-        trailing: Switch(
-          value: isEnabled,
-          onChanged: (v) {
-            final state = context.read<DevicePreviewStore>();
-            state.data = state.data.copyWith(isEnabled: v);
-          },
+
+    return Container(
+      decoration: BoxDecoration(
+        color: isDark ? kSurfaceDark : Colors.white,
+        border: Border(
+          top: BorderSide(
+            color: isDark ? kBorderDark : const Color(0xFFE0E4EA),
+            width: 0.5,
+          ),
+        ),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.1),
+            blurRadius: 8,
+            offset: const Offset(0, -2),
+          ),
+        ],
+      ),
+      child: Material(
+        color: Colors.transparent,
+        child: ListTile(
+          title: Row(
+            children: [
+              Container(
+                width: 28,
+                height: 28,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(8),
+                  gradient: const LinearGradient(
+                    colors: [kAccentColor, Color(0xFF0097A7)],
+                  ),
+                ),
+                child: const Icon(
+                  Icons.devices_rounded,
+                  color: Colors.white,
+                  size: 14,
+                ),
+              ),
+              const SizedBox(width: 10),
+              const Text(
+                'Device Preview',
+                style: TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ],
+          ),
+          onTap: isEnabled ? showPanel : null,
+          trailing: Switch(
+            value: isEnabled,
+            onChanged: (v) {
+              final state = context.read<DevicePreviewStore>();
+              state.data = state.data.copyWith(isEnabled: v);
+            },
+          ),
         ),
       ),
     );
