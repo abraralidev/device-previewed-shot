@@ -34,7 +34,7 @@ Add this to your project's `pubspec.yaml` file:
 
 ```yml
 dependencies:
-  device_preview_shot: ^2.2.0
+  device_preview_shot: ^2.3.0
 ```
 
 ## Usage
